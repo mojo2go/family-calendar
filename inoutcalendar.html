@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Schedule</title>
+    <style>
+        body {
+            font-family: "Courier New", monospace;
+            background-color: white;
+            text-align: center;
+        }
+        table {
+            width: auto;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        td {
+            font-weight: bold;
+            position: relative;
+        }
+
+        /* Set column widths */
+        th:nth-child(1), td:nth-child(1) { width: 50px; }
+        th:nth-child(2), td:nth-child(2) { width: 70px; }
+        th:nth-child(n+3) { min-width: 6ch; }
+
+        /* Full-color (ON) states */
+        .joe { background-color: #ffdddd; }
+        .maya { background-color: #ddffdd; }
+        .hedwig { background-color: #ddddff; }
+        .stella { background-color: #fff4cc; }
+        .cooper { background-color: #f0d8ff; }
+        .terje { background-color: #d8fff0; }
+        .silvia { background-color: #ffd8f0; }
+
+        /* OFF (white) */
+        .out { background-color: white !important; }
+
+/* Medium-soft edged Half-Day States */
+.half-top.joe { background: linear-gradient(to bottom, #ffdddd 45%, rgba(255, 221, 221, 0.5) 50%, white 55%); }
+.half-bottom.joe { background: linear-gradient(to bottom, white 45%, rgba(255, 221, 221, 0.5) 50%, #ffdddd 55%); }
+
+.half-top.maya { background: linear-gradient(to bottom, #ddffdd 45%, rgba(221, 255, 221, 0.5) 50%, white 55%); }
+.half-bottom.maya { background: linear-gradient(to bottom, white 45%, rgba(221, 255, 221, 0.5) 50%, #ddffdd 55%); }
+
+.half-top.hedwig { background: linear-gradient(to bottom, #ddddff 45%, rgba(221, 221, 255, 0.5) 50%, white 55%); }
+.half-bottom.hedwig { background: linear-gradient(to bottom, white 45%, rgba(221, 221, 255, 0.5) 50%, #ddddff 55%); }
+
+.half-top.stella { background: linear-gradient(to bottom, #fff4cc 45%, rgba(255, 244, 204, 0.5) 50%, white 55%); }
+.half-bottom.stella { background: linear-gradient(to bottom, white 45%, rgba(255, 244, 204, 0.5) 50%, #fff4cc 55%); }
+
+.half-top.cooper { background: linear-gradient(to bottom, #f0d8ff 45%, rgba(240, 216, 255, 0.5) 50%, white 55%); }
+.half-bottom.cooper { background: linear-gradient(to bottom, white 45%, rgba(240, 216, 255, 0.5) 50%, #f0d8ff 55%); }
+
+.half-top.terje { background: linear-gradient(to bottom, #d8fff0 45%, rgba(216, 255, 240, 0.5) 50%, white 55%); }
+.half-bottom.terje { background: linear-gradient(to bottom, white 45%, rgba(216, 255, 240, 0.5) 50%, #d8fff0 55%); }
+
+.half-top.silvia { background: linear-gradient(to bottom, #ffd8f0 45%, rgba(255, 216, 240, 0.5) 50%, white 55%); }
+.half-bottom.silvia { background: linear-gradient(to bottom, white 45%, rgba(255, 216, 240, 0.5) 50%, #ffd8f0 55%); }
+
+
+
+/* Soft-edged "Out for Dinner" state */
+.out-dinner.joe { background: linear-gradient(to bottom, #ffdddd 30%, rgba(255, 221, 221, 0.2) 40%, rgba(255, 221, 221, 0.2) 60%, #ffdddd 70%); }
+.out-dinner.maya { background: linear-gradient(to bottom, #ddffdd 30%, rgba(221, 255, 221, 0.2) 40%, rgba(221, 255, 221, 0.2) 60%, #ddffdd 70%); }
+.out-dinner.hedwig { background: linear-gradient(to bottom, #ddddff 30%, rgba(221, 221, 255, 0.2) 40%, rgba(221, 221, 255, 0.2) 60%, #ddddff 70%); }
+.out-dinner.stella { background: linear-gradient(to bottom, #fff4cc 30%, rgba(255, 244, 204, 0.2) 40%, rgba(255, 244, 204, 0.2) 60%, #fff4cc 70%); }
+.out-dinner.cooper { background: linear-gradient(to bottom, #f0d8ff 30%, rgba(240, 216, 255, 0.2) 40%, rgba(240, 216, 255, 0.2) 60%, #f0d8ff 70%); }
+.out-dinner.terje { background: linear-gradient(to bottom, #d8fff0 30%, rgba(216, 255, 240, 0.2) 40%, rgba(216, 255, 240, 0.2) 60%, #d8fff0 70%); }
+.out-dinner.silvia { background: linear-gradient(to bottom, #ffd8f0 30%, rgba(255, 216, 240, 0.2) 40%, rgba(255, 216, 240, 0.2) 60%, #ffd8f0 70%); }
+
+
+
+        /* Thick black line between weeks */
+        .week-divider td {
+            border-top: 3px solid black !important;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Family Schedule - 3 Week View</h2>
+    
+    <label for="start-date">Select Start Date:</label>
+    <input type="date" id="start-date">
+    <button onclick="generateCalendar()">Generate</button>
+
+    <table id="schedule">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Date</th>
+                <th>Joe</th>
+                <th>Maya</th>
+                <th>Hedwig</th>
+                <th>Stella</th>
+                <th>Cooper</th>
+                <th>Terje</th>
+                <th>Silvia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be generated dynamically -->
+        </tbody>
+    </table>
+    <button onclick="exportSchedule()">Export Schedule</button>
+
+    <script>
+        const familyMembers = ["joe", "maya", "hedwig", "stella", "cooper", "terje", "silvia"];
+        const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const today = new Date().toISOString().split("T")[0];
+            document.getElementById("start-date").value = today;
+            generateCalendar();
+        });
+
+        function generateCalendar() {
+            let startDate = new Date(document.getElementById("start-date").value);
+            let tableBody = document.querySelector("#schedule tbody");
+            tableBody.innerHTML = ""; // Clear existing table data
+            
+            for (let i = 0; i < 21; i++) {
+                let day = weekdays[startDate.getDay()];
+                let dateString = startDate.toISOString().split("T")[0].substring(5); // Format as MM-DD
+                
+                let row = document.createElement("tr");
+                
+                // Add week separator before Mondays
+                if (day === "Mon" && i !== 0) row.classList.add("week-divider");
+                
+                row.innerHTML = `<td>${day}</td><td>${dateString}</td>` +
+                    familyMembers.map(member => `<td class="${member}" data-state="0"></td>`).join("");
+                
+                tableBody.appendChild(row);
+                startDate.setDate(startDate.getDate() + 1);
+            }
+
+            // Reattach click event listeners
+            document.querySelectorAll("#schedule td").forEach(cell => {
+                if (cell.cellIndex > 1) { // Ignore day & date columns
+                    cell.addEventListener("click", () => toggleCell(cell));
+                }
+            });
+        }
+
+        function toggleCell(cell) {
+    const states = ["", "out", "half-top", "half-bottom", "out-dinner"];
+    let currentState = parseInt(cell.getAttribute("data-state"), 10) || 0;
+    let newState = (currentState + 1) % states.length;
+
+    cell.className = cell.className.split(" ")[0]; // Keep base class (color)
+    if (newState !== 0) cell.classList.add(states[newState]);
+
+    cell.setAttribute("data-state", newState);
+}
+
+function exportSchedule() {
+    let scheduleData = {};
+    document.querySelectorAll("#schedule td[data-state]").forEach(cell => {
+        let key = `${cell.dataset.row}-${cell.dataset.col}`;
+        scheduleData[key] = cell.getAttribute("data-state");
+    });
+
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(scheduleData));
+    let downloadAnchor = document.createElement("a");
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "schedule.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    document.body.removeChild(downloadAnchor);
+}
+
+
+    </script>
+
+</body>
+</html>
