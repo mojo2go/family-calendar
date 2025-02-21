@@ -173,7 +173,6 @@ function exportSchedule() {
         let key = `${cell.dataset.row}-${cell.dataset.col}`;
         scheduleData[key] = cell.getAttribute("data-state");
     });
-
     let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(scheduleData));
     let downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
